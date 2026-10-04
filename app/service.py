@@ -14,11 +14,13 @@ def list_tasks(status: str | None = None, q: str | None = None) -> list[dict[str
     for task in tasks:
         # Instructor note: intentional bug for the lab.
         # This uses the literal string "status" instead of the query parameter value.
-        if status and task["status"] != "status":
+        if status and task["status"] != status:
             continue
 
         # Instructor note: partial feature for the lab.
         # The route already accepts `q`, but search is not implemented yet.
+        if q and q.lower() not in task["title"].lower() and q.lower() not in task.get("description", "").lower():
+            continue
         filtered.append(task)
 
     return filtered
@@ -59,6 +61,8 @@ def complete_task(task_id: int) -> dict[str, Any] | None:
 
             # Instructor note: intentional bug for the lab.
             # The updated task is returned, but the stored list is never updated or saved.
-            return updated_task
+            tasks = [updated_task if t["id"] == task_id else t for t in tasks]
+        save_tasks(tasks)
+        return updated_task
 
     return None
