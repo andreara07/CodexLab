@@ -62,7 +62,7 @@ def complete_task(task_id: int) -> dict[str, Any] | None:
             # Instructor note: intentional bug for the lab.
             # The updated task is returned, but the stored list is never updated or saved.
             tasks = [updated_task if t["id"] == task_id else t for t in tasks]
-        save_tasks(tasks)
-        return updated_task
+            save_tasks(tasks)
+            return updated_task
 
     return None
